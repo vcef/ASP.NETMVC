@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2 id="TO" userid ="@User.Identity.Name" >Index</h2>
+
+
+<div class="album py-5 bg-light">
+    <div class="container">
+
+        <div class="row" id="shops">
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            var $shops = $('#shops');
+            $.ajax({
+                url: "/api/Shops?userid=" + $('#TO').attr('userid'),
+                type: "GET",
+                success: function (shops) {
+                    $.each(shops, function (i, shop) {
+
+                        $shops.append('<div class="col-md-4"><div class="card mb-4 shadow-sm"><img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"  style="height: 225px; width: 100%; display: block;" src="' + shop.image + '" data-holder-rendered="true"><div class="card-body"><p class="card-text" style="padding-left: 10px;">' + shop.nom + ' | Distance : ' + shop.distance + 'Km</p><div class="btn-group" style="padding-bottom: 10px;padding-left: 10px;"><button type="button" class="btn btn-sm btn-danger">Dislike</button><button type="button" class="btn btn-sm btn-success js-like" id="like" data-shop-id ="' + shop.id + '">Like</button></div></div></div></div>');
+
+                    });
+                }
+            });
+
+            $('#shops').on("click", " .js-like", function() {
+                var sId = $(this).attr('data-shop-id');
+                var uId = $('#TO').attr('userid');
+                var couple = {
+                    ShopId: sId,
+                    UserId: uId
+                    }
+
+                $.ajax({
+                    url: "/api/Likes",
+                    method: "POST",
+                    data: JSON.stringify(couple),
+                    contentType: "application/json;charset=utf-8",
+                    success: function () {
+                        window.location.reload();
+                    }
+                });
+            });
+
+        });
+    </script>
+
+}

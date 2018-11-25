@@ -1,0 +1,95 @@
+﻿@model IEnumerable<vcef01.Models.Client>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table id="std" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Cin)</th>
+            <th>@Html.DisplayNameFor(model => model.Sexe)</th>
+            <th>@Html.DisplayNameFor(model => model.Nom)</th>
+            <th>@Html.DisplayNameFor(model => model.Prenom)</th>
+            <th>@Html.DisplayNameFor(model => model.Telephone)</th>
+            <th>@Html.DisplayNameFor(model => model.DateNaissance)</th>
+            <th>@Html.DisplayNameFor(model => model.Ville)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+
+            var tab = $("#std").DataTable({
+                ajax: {
+                    url: "/api/Clients",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "cin"
+                    },
+                    {
+                        data: "sexe"
+                    },
+                    {
+                        data: "nom"
+                    },
+                    {
+                        data: "prenom"
+                    },
+                    {
+                        data: "telephone"
+                    },
+                    {
+                        data: "dateNaissance"
+                    },
+                    {
+                        data: "ville"
+                    },
+                    {
+                        data: "email"
+                    },
+                    {
+                        render: function (data, type, item) {
+                            return "<a class='btn btn-info' href='/Clients/Edit/" + item.id + "'> Modif </a>|" +
+                                "<a class='btn btn-info' href='/Clients/Details/" + item.id + "'> Detail </a>|" + 
+                                "<button class='btn btn-warning js-delete' data-std-id=" + item.id + ">Supp </button>";
+                        }
+                    }
+                ],
+                destroy: true
+            });
+
+            $("#std").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Are you sure you want to delete this Client ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/Clients/" + button.attr("data-std-id"),
+                            method: "DELETE",
+                            success: function () {
+                                tab.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+
+                    }
+                });
+            });
+
+        });
+    </script>
+}

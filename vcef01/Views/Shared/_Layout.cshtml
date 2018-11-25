@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mon application ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"></button>
+        @Html.ActionLink("Nom d'application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        <div class="navbar-collapse collapse" id="navbarSupportedContent">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <ul class="nav navbar-nav mr-auto">
+                    <li>@Html.ActionLink("Shops", "Index", "Shops", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Preferred", "Preferred", "Shops", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                </ul>
+            }
+            else
+            {
+                <ul class="nav navbar-nav mr-auto">
+                    <li>@Html.ActionLink("Accueil", "Index", "Home", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("À propos de", "About", "Home", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                </ul>
+            }
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/lib")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
